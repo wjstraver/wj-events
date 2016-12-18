@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Test EventListener</title>
+		<script type="text/javascript" src="js/WJEvents.js" ></script>
+		<script>
+			var Events = {
+				TEST: 'test-event'
+			};
+
+			var Model = function(){
+				var _myValue = 0;
+
+				var _doSomething = function(){
+					_public.trigger(Events.TEST, 'model is doing something');
+				};
+
+				var _public = {
+					doSomething: 	_doSomething
+				};
+
+				extend(_public, WJEvents);
+				return _public;
+			}();
+
+			var Controller = function(){
+
+				var _doSomething = function(){
+					_public.trigger(Events.TEST,'controller is doing something');
+				};
+
+				var _public = {
+					doSomething: 	_doSomething
+				};
+
+				extend(_public, WJEvents);
+				return _public;
+			}();
+
+
+			var testFunction = function(val){
+				console.log('testFunction fired:',val);
+			};
+
+			Controller.once(Events.TEST, testFunction);
+			Model.on(Events.TEST, testFunction);
+
+			console.log('%cFirst round of triggering','font-weight:bold;');
+			Model.doSomething(); // test function being fired by Model
+			Controller.doSomething(); // test function being fired by Controller
+
+			console.log('%cSecond round of triggering','font-weight:bold;');
+			Controller.doSomething(); // nothing is getting fired
+			Model.doSomething(); // test function being fired by Model
+
+			Model.off(Events.TEST, testFunction);
+			console.log('%cThird round of triggering','font-weight:bold;');
+			Model.doSomething();
+			Controller.doSomething();
+		</script>
+	</head>
+	<body>
+		<p>Go to the console!</p>
+	</body>
+</html>
