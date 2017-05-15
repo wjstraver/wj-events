@@ -46,6 +46,7 @@
 				var fns = ( this._events.on && this._events.on[eventName] )? this._events.on[eventName].concat() : [];
 				if( this._events.once && this._events.once[eventName] ){
 					fns = fns.concat(this._events.once[eventName]);
+                    			this._events.once[eventName] = [];
 				}
 				_trigger(fns, args);
 			}
